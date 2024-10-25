@@ -14,14 +14,14 @@ function App() {
 
   const saveToLS = (tasks) => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-  }
+  };
 
   function toggleComplete(index) {
     const updatedTasks = tasks.map((task, i) => {
       if (i === index) {
         return {
           ...task,
-          completed: !task.completed
+          completed: !task.completed,
         };
       }
       return task;
@@ -36,8 +36,11 @@ function App() {
 
   function addJob() {
     if (newTask.trim() !== "") {
-      setTasks(prevTasks => {
-        const updatedTasks = [...prevTasks, { task: newTask, completed: false }];
+      setTasks((prevTasks) => {
+        const updatedTasks = [
+          ...prevTasks,
+          { task: newTask, completed: false },
+        ];
         saveToLS(updatedTasks);
         return updatedTasks;
       });
@@ -53,9 +56,12 @@ function App() {
 
   function moveUp(index) {
     if (index > 0) {
-      setTasks(prevTasks => {
+      setTasks((prevTasks) => {
         const updatedTasks = [...prevTasks];
-        [updatedTasks[index], updatedTasks[index - 1]] = [updatedTasks[index - 1], updatedTasks[index]];
+        [updatedTasks[index], updatedTasks[index - 1]] = [
+          updatedTasks[index - 1],
+          updatedTasks[index],
+        ];
         saveToLS(updatedTasks);
         return updatedTasks;
       });
@@ -64,9 +70,12 @@ function App() {
 
   function moveDown(index) {
     if (index < tasks.length - 1) {
-      setTasks(prevTasks => {
+      setTasks((prevTasks) => {
         const updatedTasks = [...prevTasks];
-        [updatedTasks[index], updatedTasks[index + 1]] = [updatedTasks[index + 1], updatedTasks[index]];
+        [updatedTasks[index], updatedTasks[index + 1]] = [
+          updatedTasks[index + 1],
+          updatedTasks[index],
+        ];
         saveToLS(updatedTasks);
         return updatedTasks;
       });
@@ -74,43 +83,81 @@ function App() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-5 m-5 shadow-xl border">
-      <h1 className="font-bold text-4xl mb-16 bg-blue-500 text-white p-5">To-Do List</h1>
+    <>
+      <header>
+        <h1 className="text-2xl text-center mb-16 bg-gray-800 font-medium text-white p-4">
+          To-Do List
+        </h1>
+      </header>
 
-      <div className="mb-8 grid sm:grid-cols-[2fr_1fr] ">
-        <input className="flex-grow border border-gray-300 p-2 outline-none" type="text" 
-        placeholder="Enter a task..." value={newTask} onChange={handleInput}/>
+      <main className="p-10">
+        <div className="grid sm:grid-cols-[2fr_1fr] mb-10 max-w-xl mx-auto">
+          <input
+            className="flex-grow border border-gray-300 p-3 outline-none"
+            type="text"
+            placeholder="Enter a task..."
+            value={newTask}
+            onChange={handleInput}
+          />
 
-        <button className="bg-blue-500 text-white p-2 hover:bg-blue-400" onClick={addJob}>Add Task</button>
-      </div>
+          <button
+            className="bg-gray-800 text-white p-2 hover:bg-gray-600"
+            onClick={addJob}
+          >
+            Add Task
+          </button>
+        </div>
 
-      <ol className="space-y-4">
-        {tasks.map((task, index) => (
-          <li key={index} className="flex justify-between flex-col sm:flex-row items-start p-2 border border-gray-300 rounded">
-            <div className="flex items-center flex-1 mr-4 mb-3">
-              <input className="mr-2" type="checkbox" checked={task.completed} onChange={() => toggleComplete(index)}/>
-              <span className={`text-clip break-all ${task.completed ? "line-through" : ""}`}>{task.task}</span>
-            </div>
+        <ol className="space-y-4">
+          {tasks.map((task, index) => (
+            <li
+              key={index}
+              className="flex justify-between max-w-2xl mx-auto flex-col sm:flex-row items-start p-2 border border-gray-300 rounded"
+            >
+              <div className="flex items-center flex-1 mr-4 mb-3">
+                <input
+                  className="mr-2"
+                  type="checkbox"
+                  checked={task.completed}
+                  onChange={() => toggleComplete(index)}
+                />
+                <span
+                  className={`text-clip break-all ${
+                    task.completed ? "line-through" : ""
+                  }`}
+                >
+                  {task.task}
+                </span>
+              </div>
 
-            <div className="flex gap-2 m-auto">
-              <button className="bg-red-500 text-white hover:bg-red-400 p-3  rounded" onClick={() => deleteJob(index)}>
-                Delete
-              </button>
+              <div className="flex gap-2 m-auto">
+                <button
+                  className="bg-gray-800 text-white hover:bg-gray-600 p-3  rounded"
+                  onClick={() => deleteJob(index)}
+                >
+                  Delete
+                </button>
 
-              <button className="text-blue-500 hover:text-blue-300" onClick={() => moveUp(index)}>
-                <i className="fa-solid fa-angle-up"></i>
-              </button>
+                <button
+                  className="text-gray-800 hover:text-gray-500"
+                  onClick={() => moveUp(index)}
+                >
+                  <i className="fa-solid fa-angle-up"></i>
+                </button>
 
-              <button className="text-blue-500 hover:text-blue-300" onClick={() => moveDown(index)}>
-                <i className="fa-solid fa-angle-down"></i>
-              </button>
-            </div>
-          </li>
-        ))}
-      </ol>
-
-    </div>
-  )
+                <button
+                  className="text-gray-800 hover:text-gray-500"
+                  onClick={() => moveDown(index)}
+                >
+                  <i className="fa-solid fa-angle-down"></i>
+                </button>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </main>
+    </>
+  );
 }
 
-export default App
+export default App;
