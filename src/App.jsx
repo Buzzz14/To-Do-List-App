@@ -156,6 +156,10 @@ function App() {
           ))}
         </ol>
       </main>
+
+      <footer>
+        <p className="text-center">&copy; 2024 To-Do List App</p>
+      </footer>
     </>
   );
 }
